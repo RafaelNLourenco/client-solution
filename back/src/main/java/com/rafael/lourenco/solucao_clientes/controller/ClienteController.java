@@ -9,6 +9,6 @@ public class ClienteController {
     @GetMapping("/clientes")
 
     public String getClientes(){
-
+        return "";
     }
 }
