@@ -1,0 +1,55 @@
+<app-header></app-header>
+<mat-card>
+    <mat-card-title>Cadastro de Empresa</mat-card-title>
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <mat-form-field appearance="fill">
+        <mat-label>Nome da Empresa</mat-label>
+        <input matInput formControlName="companyName" />
+        <mat-error *ngIf="form.get('companyName')?.hasError('required')">
+          Nome da Empresa é obrigatório
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Nome Fantasia</mat-label>
+        <input matInput formControlName="tradeName" />
+        <mat-error *ngIf="form.get('tradeName')?.hasError('required')">
+          Nome Fantasia é obrigatório
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>ID Fiscal</mat-label>
+        <input matInput formControlName="taxID" />
+        <mat-error *ngIf="form.get('taxID')?.hasError('required')">
+          ID Fiscal é obrigatório
+        </mat-error>
+        <mat-error *ngIf="form.get('taxID')?.hasError('pattern')">
+          ID Fiscal deve conter apenas números
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Contato</mat-label>
+        <input matInput formControlName="contact" />
+        <mat-error *ngIf="form.get('contact')?.hasError('required')">
+          Contato é obrigatório
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Status</mat-label>
+        <mat-select formControlName="status">
+          <mat-option *ngFor="let status of statuses" [value]="status">
+            {{ status }}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="form.get('status')?.hasError('required')">
+          Status é obrigatório
+        </mat-error>
+      </mat-form-field>
+
+      <button mat-raised-button color="primary" type="submit">Enviar</button>
+    </form>
+  </mat-card>
+
