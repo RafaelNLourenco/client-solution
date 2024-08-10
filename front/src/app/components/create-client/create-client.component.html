@@ -40,8 +40,8 @@
       <mat-form-field appearance="fill">
         <mat-label>Status</mat-label>
         <mat-select formControlName="status">
-          <mat-option *ngFor="let status of statuses" [value]="status">
-            {{ status }}
+          <mat-option *ngFor="let status of statuses" [value]="status.value">
+            {{ status.label}}
           </mat-option>
         </mat-select>
         <mat-error *ngIf="form.get('status')?.hasError('required')">

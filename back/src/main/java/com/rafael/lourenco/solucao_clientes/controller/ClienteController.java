@@ -1,14 +1,26 @@
 package com.rafael.lourenco.solucao_clientes.controller;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.rafael.lourenco.solucao_clientes.model.Client;
+import com.rafael.lourenco.solucao_clientes.service.ClientService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
+@RequestMapping("/clients")
 public class ClienteController {
 
-    @GetMapping("/clientes")
+    @Autowired
+    private ClientService clientService;
 
-    public String getClientes(){
-        return "";
+    @GetMapping
+    public List<Client> getClients(){
+        return clientService.getClients();
+    }
+
+    @PostMapping
+    public void createClients(@RequestBody Client client){
+        clientService.createClients(client);
     }
 }

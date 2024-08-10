@@ -9,6 +9,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { CommonModule } from '@angular/common';
+import { ClientService } from '../../services/client/client.service';
+import { Client } from '../../vo/client.model';
 
 @Component({
   selector: 'app-create-client',
@@ -27,11 +29,15 @@ import { CommonModule } from '@angular/common';
 })
 export class CreateClientComponent {
   form: FormGroup;
-  statuses = ['Ativo', 'Inativo', 'Pendente'];
+
+  statuses = [
+    {label: 'Ativado', value: 1},
+    {label: 'Desativado', value: 0},
+  ]
 
   taxIDRegEx = '([0-9]{2}[\.]?[0-9]{3}[\.]?[0-9]{3}[\/]?[0-9]{4}[-]?[0-9]{2})|([0-9]{3}[\.]?[0-9]{3}[\.]?[0-9]{3}[-]?[0-9]{2})';
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private clientService: ClientService) {
     this.form = this.fb.group({
       companyName: ['', Validators.required],
       tradeName: ['', Validators.required],
@@ -43,9 +49,21 @@ export class CreateClientComponent {
 
   onSubmit() {
     if (this.form.valid) {
-      console.log(this.form.value);
+      const aux = this.form.value;
+      var client: Client = new Client(aux.companyName,aux.tradeName, aux.taxID, aux.contact, aux.status)
+      this.clientService.createClient(client).subscribe({
+        next: response => {
+          console.log("Boa");
+        },
+        error: error => {
+          console.error('Erro ao criar cliente', error);
+        }
+        }
+      );
     } else {
       console.log('Formulário inválido');
     }
   }
+
+  ngOnInit(): void { }
 }
