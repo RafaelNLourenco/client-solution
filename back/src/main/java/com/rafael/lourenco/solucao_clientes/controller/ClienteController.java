@@ -1,8 +1,12 @@
 package com.rafael.lourenco.solucao_clientes.controller;
 
+import com.rafael.lourenco.solucao_clientes.dto.DefaultContentDTO;
 import com.rafael.lourenco.solucao_clientes.model.Client;
 import com.rafael.lourenco.solucao_clientes.service.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,12 +19,20 @@ public class ClienteController {
     private ClientService clientService;
 
     @GetMapping
-    public List<Client> getClients(){
-        return clientService.getClients();
+    public ResponseEntity<?> getClients(){
+        try {
+            return ResponseEntity.ok(clientService.getClients());
+        } catch (Exception e) {
+            System.out.println(e);
+
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("An error occurred while getting clients.");
+        }
     }
 
     @PostMapping
-    public void createClients(@RequestBody Client client){
+    public ResponseEntity<DefaultContentDTO> createClients(@RequestBody Client client){
         clientService.createClients(client);
+        return ResponseEntity.ok(new DefaultContentDTO("Created"));
     }
 }

@@ -10,7 +10,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { CommonModule } from '@angular/common';
 import { ClientService } from '../../services/client/client.service';
-import { Client } from '../../vo/client.model';
+import { Client } from '../../model/client.model';
+import { NgxMaskDirective } from 'ngx-mask';
+import { cpfCnpjValidator } from '../../functions/validator_cpf_cnpj.function';
 
 @Component({
   selector: 'app-create-client',
@@ -22,7 +24,8 @@ import { Client } from '../../vo/client.model';
     MatSelectModule,
     MatButtonModule,
     MatCardModule,
-    CommonModule
+    CommonModule,
+    NgxMaskDirective
   ],
   templateUrl: './create-client.component.html',
   styleUrl: './create-client.component.scss'
@@ -35,14 +38,14 @@ export class CreateClientComponent {
     {label: 'Desativado', value: 0},
   ]
 
-  taxIDRegEx = '([0-9]{2}[\.]?[0-9]{3}[\.]?[0-9]{3}[\/]?[0-9]{4}[-]?[0-9]{2})|([0-9]{3}[\.]?[0-9]{3}[\.]?[0-9]{3}[-]?[0-9]{2})';
+  phoneRegex = /^[0-9]{10}$|^[0-9]{11}$/;
 
   constructor(private fb: FormBuilder, private clientService: ClientService) {
     this.form = this.fb.group({
       companyName: ['', Validators.required],
       tradeName: ['', Validators.required],
-      taxID: ['', [Validators.required, Validators.pattern(this.taxIDRegEx)]],
-      contact: ['', Validators.required],
+      taxID: ['', [Validators.required, cpfCnpjValidator()]],
+      phone: ['', Validators.required, Validators.pattern(this.phoneRegex)],
       status: ['', Validators.required]
     });
   }
@@ -52,9 +55,6 @@ export class CreateClientComponent {
       const aux = this.form.value;
       var client: Client = new Client(aux.companyName,aux.tradeName, aux.taxID, aux.contact, aux.status)
       this.clientService.createClient(client).subscribe({
-        next: response => {
-          console.log("Boa");
-        },
         error: error => {
           console.error('Erro ao criar cliente', error);
         }
@@ -67,3 +67,7 @@ export class CreateClientComponent {
 
   ngOnInit(): void { }
 }
+function provideNgxMask(): import("@angular/core").Provider {
+  throw new Error('Function not implemented.');
+}
+

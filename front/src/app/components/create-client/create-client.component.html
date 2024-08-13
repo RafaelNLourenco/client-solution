@@ -19,21 +19,26 @@
       </mat-form-field>
 
       <mat-form-field appearance="fill">
-        <mat-label>ID Fiscal</mat-label>
-        <input matInput formControlName="taxID" />
+        <mat-label>CPF/CNPJ</mat-label>
+        <input matInput formControlName="taxID" mask="000.000.000-00||00.000.000/0000-00" />
         <mat-error *ngIf="form.get('taxID')?.hasError('required')">
-          ID Fiscal é obrigatório
+          CPF/CNPJ é obrigatório
         </mat-error>
-        <mat-error *ngIf="form.get('taxID')?.hasError('pattern')">
-          ID Fiscal deve conter apenas números
+        <mat-error *ngIf="form.get('taxID')?.hasError('invalidTaxID')">
+          Deve ser um CPF ou CNPJ válido
         </mat-error>
       </mat-form-field>
 
+      <br>
+
       <mat-form-field appearance="fill">
         <mat-label>Contato</mat-label>
-        <input matInput formControlName="contact" />
-        <mat-error *ngIf="form.get('contact')?.hasError('required')">
+        <input matInput formControlName="phone" mask="(00) 0000-0000||(00) 00000-0000"/>
+        <mat-error *ngIf="form.get('phone')?.hasError('required')">
           Contato é obrigatório
+        </mat-error>
+        <mat-error *ngIf="form.get('phone')?.hasError('pattern')">
+          Contato deve ter entre 10 e 11 digitos
         </mat-error>
       </mat-form-field>
 

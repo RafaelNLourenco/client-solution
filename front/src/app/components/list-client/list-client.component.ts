@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { HeaderComponent } from '../header/header.component';
-import { Client } from '../../vo/client.model';
+import { Client } from '../../model/client.model';
 import { MatTableModule } from '@angular/material/table';
 import { ClientService } from '../../services/client/client.service';
 import { CommonModule } from '@angular/common';
