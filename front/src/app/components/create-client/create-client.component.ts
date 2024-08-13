@@ -1,18 +1,19 @@
 import { Component } from '@angular/core';
-import { HeaderComponent } from '../header/header.component';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { HeaderComponent } from '../header/header.component';
 
+import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
-import { MatInputModule } from '@angular/material/input';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
-import { CommonModule } from '@angular/common';
-import { ClientService } from '../../services/client/client.service';
-import { Client } from '../../model/client.model';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { NgxMaskDirective } from 'ngx-mask';
 import { cpfCnpjValidator } from '../../functions/validator_cpf_cnpj.function';
+import { Client } from '../../model/client.model';
+import { ClientService } from '../../services/client/client.service';
 
 @Component({
   selector: 'app-create-client',
@@ -40,34 +41,56 @@ export class CreateClientComponent {
 
   phoneRegex = /^[0-9]{10}$|^[0-9]{11}$/;
 
-  constructor(private fb: FormBuilder, private clientService: ClientService) {
+  constructor(private fb: FormBuilder,
+              private clientService: ClientService,
+              private _snackBar: MatSnackBar
+  ) {
     this.form = this.fb.group({
-      companyName: ['', Validators.required],
-      tradeName: ['', Validators.required],
+      companyName: ['', [Validators.required, Validators.minLength(5)]],
+      tradeName: ['', [Validators.required, Validators.minLength(5) ]],
       taxID: ['', [Validators.required, cpfCnpjValidator()]],
-      phone: ['', Validators.required, Validators.pattern(this.phoneRegex)],
+      phone: ['', [Validators.required, Validators.pattern(this.phoneRegex)]],
       status: ['', Validators.required]
     });
   }
 
+  // Aux functions
+  showSnackBar(message: string){
+    this._snackBar.open(message, '', {
+      duration: 3000
+    });
+  }
+
+  formReset(){
+    this.form.reset();
+    Object.keys(this.form.controls).forEach(key => {
+      this.form.get(key)?.setErrors(null);
+    });
+  }
+
+  // Events functions
   onSubmit() {
     if (this.form.valid) {
       const aux = this.form.value;
-      var client: Client = new Client(aux.companyName,aux.tradeName, aux.taxID, aux.contact, aux.status)
+      var client: Client = new Client(aux.companyName,aux.tradeName, aux.taxID, aux.phone, aux.status)
       this.clientService.createClient(client).subscribe({
-        error: error => {
-          console.error('Erro ao criar cliente', error);
+        next: _ => {
+          this.formReset();
+          this.showSnackBar("Cliente adicionado!");
+        },
+        error: _ => {
+          this.showSnackBar("Ocorreu um erro");
         }
-        }
-      );
+      });
     } else {
-      console.log('Formulário inválido');
+      this.showSnackBar('Formulário inválido');
     }
   }
 
-  ngOnInit(): void { }
+  trimInput(controlName: string): void {
+    const control = this.form.get(controlName);
+    if (control) {
+      control.setValue(control.value.trim(), { emitEvent: false });
+    }
+  }
 }
-function provideNgxMask(): import("@angular/core").Provider {
-  throw new Error('Function not implemented.');
-}
-

@@ -4,23 +4,29 @@
     <form [formGroup]="form" (ngSubmit)="onSubmit()">
       <mat-form-field appearance="fill">
         <mat-label>Nome da Empresa</mat-label>
-        <input matInput formControlName="companyName" />
+        <input matInput formControlName="companyName" (input)="trimInput('companyName')"/>
         <mat-error *ngIf="form.get('companyName')?.hasError('required')">
           Nome da Empresa é obrigatório
+        </mat-error>
+        <mat-error *ngIf="form.get('companyName')?.hasError('minlength')">
+          Nome da Empresa deve ter no mínimo 5 caracteres
         </mat-error>
       </mat-form-field>
 
       <mat-form-field appearance="fill">
         <mat-label>Nome Fantasia</mat-label>
-        <input matInput formControlName="tradeName" />
+        <input matInput formControlName="tradeName" (input)="trimInput('tradeName')"/>
         <mat-error *ngIf="form.get('tradeName')?.hasError('required')">
           Nome Fantasia é obrigatório
+        </mat-error>
+        <mat-error *ngIf="form.get('tradeName')?.hasError('minlength')">
+          Nome fantasia deve ter no mínimo 5 caracteres
         </mat-error>
       </mat-form-field>
 
       <mat-form-field appearance="fill">
         <mat-label>CPF/CNPJ</mat-label>
-        <input matInput formControlName="taxID" mask="000.000.000-00||00.000.000/0000-00" />
+        <input matInput formControlName="taxID" mask="000.000.000-00||00.000.000/0000-00"/>
         <mat-error *ngIf="form.get('taxID')?.hasError('required')">
           CPF/CNPJ é obrigatório
         </mat-error>
@@ -54,7 +60,7 @@
         </mat-error>
       </mat-form-field>
 
-      <button mat-raised-button color="primary" type="submit">Enviar</button>
+      <button mat-raised-button [disabled]="!form.valid" color="primary" type="submit">Enviar</button>
     </form>
   </mat-card>
 

@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
-import { HeaderComponent } from '../header/header.component';
-import { Client } from '../../model/client.model';
-import { MatTableModule } from '@angular/material/table';
-import { ClientService } from '../../services/client/client.service';
 import { CommonModule } from '@angular/common';
+import { Component } from '@angular/core';
+import { MatTableModule } from '@angular/material/table';
+import { NgxMaskPipe } from 'ngx-mask';
+import { Client } from '../../model/client.model';
+import { ClientService } from '../../services/client/client.service';
+import { HeaderComponent } from '../header/header.component';
 
 
 @Component({
@@ -11,7 +12,8 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [HeaderComponent,
             MatTableModule,
-            CommonModule
+            CommonModule,
+            NgxMaskPipe
   ],
   templateUrl: './list-client.component.html',
   styleUrl: './list-client.component.scss'
