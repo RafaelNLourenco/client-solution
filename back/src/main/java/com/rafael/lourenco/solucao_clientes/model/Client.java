@@ -4,6 +4,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,10 +19,24 @@ public class Client {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
+    @NotBlank
+    @Size(min = 5)
     private String companyName;
-    private String tradeName;
-    private String TaxID;
-    private String contact;
-    private Integer status;
 
+    @NotBlank
+    @Size(min = 5)
+    private String tradeName;
+
+    @NotBlank
+    @Pattern(regexp = "\\d{11}|\\d{14}")
+    private String TaxID;
+
+    @NotBlank
+    @Pattern(regexp = "\\d{10,11}")
+    private String contact;
+
+    @NotNull
+    @Min(0)
+    @Max(1)
+    private Integer status;
 }

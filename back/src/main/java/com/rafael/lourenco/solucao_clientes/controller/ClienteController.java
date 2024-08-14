@@ -3,6 +3,8 @@ package com.rafael.lourenco.solucao_clientes.controller;
 import com.rafael.lourenco.solucao_clientes.dto.DefaultContentDTO;
 import com.rafael.lourenco.solucao_clientes.model.Client;
 import com.rafael.lourenco.solucao_clientes.service.ClientService;
+import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -31,8 +33,14 @@ public class ClienteController {
     }
 
     @PostMapping
-    public ResponseEntity<DefaultContentDTO> createClients(@RequestBody Client client){
-        clientService.createClients(client);
-        return ResponseEntity.ok(new DefaultContentDTO("Created"));
+    @Transactional
+    public ResponseEntity<DefaultContentDTO> createClients(@RequestBody @Valid Client client){
+        try{
+            clientService.createClients(client);
+            return ResponseEntity.ok(new DefaultContentDTO("Created"));
+        } catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new DefaultContentDTO("An error occurred while persisting clients."));
+        }
     }
 }
