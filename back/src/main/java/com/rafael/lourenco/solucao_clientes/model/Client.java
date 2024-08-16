@@ -5,6 +5,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,6 +14,7 @@ import java.util.UUID;
 @Entity
 @Getter
 @Setter
+@AllArgsConstructor
 public class Client {
 
     @Id
@@ -39,4 +41,6 @@ public class Client {
     @Min(0)
     @Max(1)
     private Integer status;
+
+    public Client() { }
 }

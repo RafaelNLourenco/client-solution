@@ -2,6 +2,7 @@ package com.rafael.lourenco.solucao_clientes.service;
 
 import com.rafael.lourenco.solucao_clientes.model.Client;
 import com.rafael.lourenco.solucao_clientes.repository.ClientRepository;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
